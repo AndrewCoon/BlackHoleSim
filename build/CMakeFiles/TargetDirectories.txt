@@ -1,0 +1,4 @@
+/home/andrew/Work/cpp/learn-opengl/build/CMakeFiles/glad.dir
+/home/andrew/Work/cpp/learn-opengl/build/CMakeFiles/OpenGL_Project.dir
+/home/andrew/Work/cpp/learn-opengl/build/CMakeFiles/edit_cache.dir
+/home/andrew/Work/cpp/learn-opengl/build/CMakeFiles/rebuild_cache.dir
