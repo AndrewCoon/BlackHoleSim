@@ -1,1 +1,0 @@
-/usr/bin/c++ -Wl,--dependency-file=CMakeFiles/OpenGL_Project.dir/link.d CMakeFiles/OpenGL_Project.dir/src/main.cpp.o -o OpenGL_Project  libglad.a /usr/lib/libglfw.so /usr/lib/libGL.so
