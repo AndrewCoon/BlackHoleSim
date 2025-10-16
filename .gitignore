@@ -1,0 +1,62 @@
+# ---- Build Artifacts ----
+build/
+bin/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+compile_commands.json
+
+# ---- OS-Specific Files ----
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+*~
+
+# ---- IDE and Editor Files ----
+# VSCode
+.vscode/
+# CLion / JetBrains
+.idea/
+# Visual Studio
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.sln
+# Other editors
+*.swp
+*.swo
+
+# ---- Compiled Binaries ----
+*.exe
+*.out
+*.app
+*.dll
+*.so
+*.dylib
+*.a
+*.lib
+*.obj
+*.o
+*.pdb
+*.mod
+*.ilk
+
+# ---- Logs and Temporary Files ----
+*.log
+*.tmp
+*.bak
+
+# ---- Dependency Caches ----
+_FetchContent_*
+External/
+deps/
+third_party/
