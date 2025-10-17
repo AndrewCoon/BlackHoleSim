@@ -8,7 +8,7 @@ using namespace std;
 const float PI = 3.14159265359;
 const float G = 6.6743e-11;
 const float c = 299792458.0;
-const float DT = 0.01;
+const float DT = 1e-3;
 const int RES = 100;
 const float WIDTH = 800;
 const float HEIGHT = 600;
@@ -140,15 +140,17 @@ public:
         if (&obj == &obj2) continue;
 
         vec2 distance = obj2.position - obj.position;
-        distance *= 1000.0f; // if it doesn't work just fix it
+        distance *= 1000;
         
-        if (length(distance) / 1000.0f < obj.radius + obj2.radius) {
-          obj.velocity *= -0.2f;
-        } else if (length(distance) > 0) {
+        if (length(distance) > 0.4) {
           vec2 force = (distance / length(distance)) * (G * obj.mass * obj2.mass) / static_cast<float>(pow(length(distance),2));
           vec2 deltaAccel = force / obj.mass;
 
           obj.accelerate(deltaAccel);
+        }
+
+        if (length(distance) / 1000 < obj.radius + obj2.radius) {
+          // obj.velocity *= -0.2f;
         }
       }
     }
@@ -176,8 +178,8 @@ int main() {
   Engine engine;
 
   vector<Object> objs = {
-    Object(vec2(-100, -100), vec2(10, 0), 7.35 * pow(10,22),25.0f, vec3(190.0f / 255.0f, 0.0f, 0.0f)),
-    Object(vec2(100, 100), vec2(-20, 0), 7.35 * pow(10,22), 25.0f, vec3(0.0f, 106.0f / 255.0f, 200.0f / 255.0f))
+    Object(vec2(0, 0), vec2(0, 0), 7.35e24,15.0f, vec3(190.0f / 255.0f, 0.0f, 0.0f)),
+    Object(vec2(300, 0), vec2(0, 1000), 7.35e22, 15.0f, vec3(0.0f, 106.0f / 255.0f, 200.0f / 255.0f))
   };
 
   engine.setObjects(objs);
