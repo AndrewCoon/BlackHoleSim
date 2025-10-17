@@ -7,6 +7,7 @@ using namespace std;
 
 #define PI 3.14159265359
 
+const float DT = 0.1;
 const int RES = 100;
 const int WIDTH = 800;
 const int HEIGHT = 600;
@@ -29,12 +30,18 @@ public:
     this->color = _col;
   }
 
-  void accelerate() {
-    this->velocity += acceleration;
+  vec2 getAcceleration() {
+    return this-> acceleration;
   }
 
-  void updatePosition() {
-    this->position += velocity;
+  vec2 accelerate() {
+    this->velocity += acceleration * DT;
+    return this->velocity;
+  }
+
+  vec2 updatePosition() {
+    this->position += velocity * DT;
+    return this->position;
   }
 
   void step() {
@@ -131,7 +138,7 @@ public:
     glClear(GL_COLOR_BUFFER_BIT);
 
     for(auto& obj:this->objects) {
-//      obj.step();
+      obj.step();
       obj.draw(RES);
     }
   }
