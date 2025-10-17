@@ -47,6 +47,7 @@ public:
   void step() {
     this->accelerate();
     this->updatePosition();
+    this->checkCollisions();
   }
 
   void checkCollisions() {
@@ -156,8 +157,8 @@ int main() {
   Engine engine;
 
   vector<Object> objs = {
-    Object(vec2(-100, -100), vec2(0, 0), vec2(0, -9.8), 25.0f, vec3(190.0f / 255.0f, 0.0f, 0.0f)),
-    Object(vec2(100, 100), vec2(0, 0), vec2(0, -9.8), 25.0f, vec3(0.0f, 106.0f, 200.0f))
+    Object(vec2(-100, -100), vec2(10, 0), vec2(0, -9.8), 25.0f, vec3(190.0f / 255.0f, 0.0f, 0.0f)),
+    Object(vec2(100, 100), vec2(20, 0), vec2(0, -9.8), 25.0f, vec3(0.0f, 106.0f, 200.0f))
   };
 
   engine.setObjects(objs);
