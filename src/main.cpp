@@ -5,37 +5,34 @@
 using namespace glm;
 using namespace std;
 
-#define PI 3.14159265359
-
-const float DT = 0.1;
+const float PI = 3.14159265359;
+const float G = 6.6743e-11;
+const float c = 299792458.0;
+const float DT = 0.01;
 const int RES = 100;
-const int WIDTH = 800;
-const int HEIGHT = 600;
-const int TOP = HEIGHT / 2;
-const int LEFT = -WIDTH / 2;
+const float WIDTH = 800;
+const float HEIGHT = 600;
+const float TOP = HEIGHT / 2;
+const float LEFT = -WIDTH / 2;
 
 class Object {
 public:
   vec2 position;
   vec2 velocity;
-  vec2 acceleration;
+  float mass;
   float radius;
   vec3 color;
 
-  Object(vec2 _pos, vec2 _vel, vec2 _accel, float _r, vec3 _col) {
+  Object(vec2 _pos, vec2 _vel, float _mass, float _r, vec3 _col) {
     this->position = _pos;
     this->velocity = _vel;
-    this->acceleration = _accel;
+    this->mass = _mass;
     this->radius = _r;
     this->color = _col;
   }
-
-  vec2 getAcceleration() {
-    return this-> acceleration;
-  }
-
-  vec2 accelerate() {
-    this->velocity += acceleration * DT;
+  
+  vec2 accelerate(vec2 _accel) {
+    this->velocity += _accel * DT;
     return this->velocity;
   }
 
@@ -45,7 +42,6 @@ public:
   }
 
   void step() {
-    this->accelerate();
     this->updatePosition();
     this->checkCollisions();
   }
@@ -53,10 +49,12 @@ public:
   void checkCollisions() {
     if (this->position.y < -TOP || this->position.y > TOP) {
       this->velocity.y *= -0.95;
+      this->position.y = clamp(this->position.y, -TOP, TOP);
     }
 
     if (this->position.x < LEFT || this->position.x > -LEFT) {
       this->velocity.x *= -0.95;
+      this->position.x = clamp(this->position.x, LEFT, -LEFT);
     }
   }
 
@@ -129,11 +127,32 @@ public:
 
     return window;
   }
+
   void run() {
     processInput(this->window);
+    simulate();
     render();
   }
   
+  void simulate() {
+    for(auto& obj:this->objects) {
+      for(auto& obj2:this->objects) {
+        if (&obj == &obj2) continue;
+
+        vec2 distance = obj2.position - obj.position;
+        distance *= 1000.0f; // if it doesn't work just fix it
+        
+        if (length(distance) / 1000.0f < obj.radius + obj2.radius) {
+          obj.velocity *= -0.2f;
+        } else if (length(distance) > 0) {
+          vec2 force = (distance / length(distance)) * (G * obj.mass * obj2.mass) / static_cast<float>(pow(length(distance),2));
+          vec2 deltaAccel = force / obj.mass;
+
+          obj.accelerate(deltaAccel);
+        }
+      }
+    }
+  }
 
   void render() {
     glClear(GL_COLOR_BUFFER_BIT);
@@ -157,8 +176,8 @@ int main() {
   Engine engine;
 
   vector<Object> objs = {
-    Object(vec2(-100, -100), vec2(10, 0), vec2(0, -9.8), 25.0f, vec3(190.0f / 255.0f, 0.0f, 0.0f)),
-    Object(vec2(100, 100), vec2(20, 0), vec2(0, -9.8), 25.0f, vec3(0.0f, 106.0f, 200.0f))
+    Object(vec2(-100, -100), vec2(10, 0), 7.35 * pow(10,22),25.0f, vec3(190.0f / 255.0f, 0.0f, 0.0f)),
+    Object(vec2(100, 100), vec2(-20, 0), 7.35 * pow(10,22), 25.0f, vec3(0.0f, 106.0f / 255.0f, 200.0f / 255.0f))
   };
 
   engine.setObjects(objs);
