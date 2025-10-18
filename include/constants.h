@@ -1,15 +1,13 @@
 #pragma once
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <iostream>
-
 
 const float PI = 3.14159265359;
 const float G = 6.6743e-11;
 const float c = 299792458.0;
 const float DT = 1e-3;
+
 const int RES = 100;
 const float WIDTH = 800;
 const float HEIGHT = 600;
