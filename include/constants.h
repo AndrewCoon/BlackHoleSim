@@ -12,4 +12,6 @@ const int RES = 100;
 const float WIDTH = 800;
 const float HEIGHT = 600;
 const float TOP = HEIGHT / 2;
+const float BOTTOM = -HEIGHT / 2;
 const float LEFT = -WIDTH / 2;
+const float RIGHT = WIDTH / 2;

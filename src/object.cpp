@@ -9,12 +9,12 @@ Object::Object(vec2 _pos, vec2 _vel, float _mass, float _r, vec3 _col)
     : position(_pos), velocity(_vel), mass(_mass), radius(_r), color(_col) {}
 
 vec2 Object::accelerate(vec2 _accel) {
-    velocity += _accel * 0.01f;
+    velocity += _accel * DT;
     return velocity;
 }
 
 vec2 Object::updatePosition() {
-    position += velocity * 0.01f;
+    position += velocity * DT;
     return position;
 }
 

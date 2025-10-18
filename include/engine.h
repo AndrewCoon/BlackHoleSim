@@ -1,4 +1,5 @@
 #pragma once
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "constants.h"
 #include "object.h"
@@ -13,6 +14,8 @@ public:
     void run();
 
 private:
+    bool paused;
+  
     GLFWwindow* StartGLFW();
     void processInput(GLFWwindow* window);
     void simulate();

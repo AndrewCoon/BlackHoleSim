@@ -4,12 +4,13 @@
 #include <iostream>
 #include <glm/glm.hpp>
 
-
 using namespace glm;
 using namespace std;
 
+
 Engine::Engine() {
-    this->window = StartGLFW();
+  this->window = StartGLFW();
+  paused = true;
 }
 
 vector<Object> Engine::setObjects(vector<Object> _n) {
@@ -45,20 +46,27 @@ GLFWwindow* Engine::StartGLFW() {
 
     glViewport(0, 0, WIDTH, HEIGHT);
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+
     glMatrixMode(GL_PROJECTION);
-    glOrtho(-WIDTH / 2, WIDTH / 2, -HEIGHT / 2, HEIGHT / 2, -1.0, 1.0);
+    glOrtho(LEFT, RIGHT, BOTTOM, TOP, -1.0, 1.0);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
     return window;
 }
 
 void Engine::run() {
-    processInput(window);
+  processInput(window);
+
+  if (!paused) {
     simulate();
-    render();
+  }
+
+  render();
 }
 
 void Engine::simulate() {
-    const float G_sim = 1.0f;
-
     for (auto& obj : objects) {
         for (auto& obj2 : objects) {
             if (&obj == &obj2) continue;
@@ -66,16 +74,16 @@ void Engine::simulate() {
             vec2 distance = obj2.position - obj.position;
             float r = length(distance);
             if (r < 1.0f) r = 1.0f;
-
+            r *= 1000;
+      
             vec2 dir = normalize(distance);
 
             if (r < obj.radius + obj2.radius) {
-                obj.velocity *= -0.2f;
-            } else {
-                vec2 force = dir * (G_sim * obj.mass * obj2.mass) / (r * r);
-                vec2 deltaAccel = force / obj.mass;
-                obj.accelerate(deltaAccel);
-            }
+              obj.velocity *= -0.2f;
+            } 
+            vec2 force = dir * (G * obj.mass * obj2.mass) / (r * r);
+            vec2 deltaAccel = force / obj.mass;
+            obj.accelerate(deltaAccel);
         }
     }
 }
@@ -83,16 +91,26 @@ void Engine::simulate() {
 void Engine::render() {
     glClear(GL_COLOR_BUFFER_BIT);
     for (auto& obj : objects) {
-        obj.step();
-        obj.draw(RES);
+      if (!paused) obj.step();
+      obj.draw(RES);
     }
 }
 
+static bool spaceWasPressed = false;
 void Engine::processInput(GLFWwindow* window) {
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
+  if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+    glfwSetWindowShouldClose(window, true);
+  }
+  if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
+    if (!spaceWasPressed) {
+      paused = !paused;
+      spaceWasPressed = true;
+    }
+  } else {
+    spaceWasPressed = false;
+  }
 }
 
 void Engine::framebuffer_size_callback(GLFWwindow* window, int width, int height) {
-    glViewport(-width / 2, -height / 2, width / 2, height / 2);
+    glViewport(0, 0, width, height);
 }
