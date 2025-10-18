@@ -84,7 +84,7 @@ void Engine::render() {
     glClear(GL_COLOR_BUFFER_BIT);
     for (auto& obj : objects) {
         obj.step();
-        obj.draw(100);
+        obj.draw(RES);
     }
 }
 
@@ -94,5 +94,5 @@ void Engine::processInput(GLFWwindow* window) {
 }
 
 void Engine::framebuffer_size_callback(GLFWwindow* window, int width, int height) {
-    glViewport(0, 0, width, height);
+    glViewport(-width / 2, -height / 2, width / 2, height / 2);
 }
