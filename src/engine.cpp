@@ -70,20 +70,21 @@ void Engine::run() {
 }
 
 void Engine::simulate() {
-  for (int i = 0; i < objects.size(); i++) {
-    Object &obj = objects[i];
-    for (int j = i + 1; j < objects.size(); j++) {
-      Object &obj2 = objects[j];
+  for (auto& obj:objects) {
+    float m1 = obj.mass;
+    for (auto& obj2:objects) {
+      float m2 = obj2.mass; 
       if (&obj == &obj2) continue;
 
       vec2 distance = obj2.position - obj.position;
+
       float r = length(distance);
       vec2 dir = normalize(distance);
 
-      vec2 force = dir * (G * obj.mass * obj2.mass) / (r * r + EPSILON * EPSILON);
-      vec2 deltaAccel = force / obj.mass;
-      obj.accelerate(deltaAccel * DT);
-      obj2.accelerate(-deltaAccel * DT);
+      vec2 force = dir * (G * m1 * m2) / (r * r + EPSILON * EPSILON);
+      obj.accelerate(force / m1 * DT);
+      std::cout << "m1: " << m1 << " m2: " << m2 << "\n";
+      std::cout << "applying force of x: " << force.x << " y: " << force.y << "\n";
     }
   }
 }
@@ -124,22 +125,9 @@ void Engine::processInput(GLFWwindow* window) {
   if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) camera.move(glm::vec2(10.0f / camera.zoom, 0.0f ));
 }
 
-// When transitioned to use z coordinates keep this function, but have it call the function that uses a vec3 with a z coord of 0
-void Engine::drawCircle(vec2 position, float radius) {
-    glBegin(GL_TRIANGLE_FAN);
-    glVertex2d(position.x, position.y);
-    for (int i = 0; i <= RES; i++) {
-        float angle = 2.0f * PI * (float)i / RES;
-        float x = position.x + cos(angle) * radius;
-        float y = position.y + sin(angle) * radius;
-        glVertex2d(x, y);
-    }
-    glEnd();
-}
-
 void Engine::drawObject(const Object& obj) {
   glColor3f(obj.color.x, obj.color.y, obj.color.z);
-  glPointSize(obj.radius * camera.zoom);
+  glPointSize(obj.radius * WIDTH / (10.0f / camera.zoom));
 
   glBegin(GL_POINTS);
   glVertex2f(obj.position.x, obj.position.y);

@@ -47,6 +47,44 @@ static vector<Object> generateCircularOrbit(int N, vec2 center, float centralMas
     return objs;
 }
 
+vec2 circularOrbitVelocity(const vec2& centerPos, float massCenter, const vec2& objPos) {
+    vec2 rVec = objPos - centerPos;
+    float r = length(rVec);
+    float speed = sqrt(G * massCenter / r); // G is already in sim units
+    return vec2(-rVec.y, rVec.x) * (speed / r); // perpendicular velocity
+}
+
+vector<Object> generateSolarSystem() {
+    vector<Object> bodies;
+
+    // Sun
+    float sunMass = 1.0f; // 1 solar mass in sim units
+    float sunRadius = 0.05f; // scaled for rendering
+    bodies.emplace_back(vec2(0.0f, 0.0f), vec2(0.0f, 0.0f), sunMass, sunRadius, vec3(1.0f, 1.0f, 0.0f));
+
+    // Planets
+    struct PlanetInfo { float distanceMeters; float massKg; float radius; vec3 color; };
+    vector<PlanetInfo> planets = {
+        { 0.387f * AU, 3.3e23f, 0.01f, vec3(0.5f,0.5f,0.5f) },   // Mercury
+        { 0.723f * AU, 4.87e24f, 0.015f, vec3(1.0f,0.7f,0.0f) }, // Venus
+        { 1.0f * AU,   5.97e24f, 0.02f, vec3(0.0f,0.0f,1.0f) },  // Earth
+        { 1.524f * AU, 0.642e24f, 0.015f, vec3(1.0f,0.0f,0.0f) } // Mars
+    };
+
+    for (auto& p : planets) {
+        // Scale distance and mass
+        vec2 pos = vec2(p.distanceMeters * DISTANCE_SCALE, 0.0f);
+        float massSim = p.massKg * MASS_SCALE;
+
+        // Circular orbit velocity (scaled)
+        vec2 vel = circularOrbitVelocity(vec2(0.0f,0.0f), sunMass, pos);
+
+        bodies.emplace_back(pos, vel, massSim, p.radius, p.color);
+    }
+
+    return bodies;
+}
+
 int main() {
   Engine engine;
 
@@ -55,7 +93,8 @@ int main() {
     Object(vec2(300, 0), vec2(0, 1000), 7.35e22, 15.0f, vec3(0.0f, 106.0f / 255.0f, 200.0f / 255.0f))
   };
 
-  engine.setObjects(generateCircularOrbit(200, vec2(0.0f, 0.0f), 1e8, 150, 1000));
+  // engine.setObjects(generateCircularOrbit(200, vec2(0.0f, 0.0f), 1e8, 150, 1000));
+  engine.setObjects(generateSolarSystem());
 
   double lastTime = glfwGetTime();
 

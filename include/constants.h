@@ -7,22 +7,29 @@
 const double TARGET_FPS = 120.0;
 const double FRAME_TIME = 1.0 / TARGET_FPS;
 
-const float EPSILON = 10;
-const float PI = 3.14159265359;
-const float G = 1.0f;
-const float DISTANCE_MULT = 1.0f;
-// const float G = 6.6743e-11;
-const float c = 299792458.0;
-const float DT = 1e-2;
+// Conversion factor from KM^3 S^-2 to AU^3 d^-2
+const float CONVERSTION_FACTOR = 2.229e-15; 
+const float AU = 1.496e11;
+const float SOLAR_MASS = 1.989e30;
 
-const int RES = 100;
+const float EPSILON = 1e-8;
+const float PI = 3.14159265359;
+const float G = 132712449941.279319 * CONVERSTION_FACTOR;
+
+const float DISTANCE_SCALE = 1.0f / AU;
+const float MASS_SCALE = 1.0f / SOLAR_MASS;
+const float DT = 1e-1;
+
 const float WIDTH = 800;
 const float HEIGHT = 600;
+
 const glm::vec2 SCREENSIZE(WIDTH, HEIGHT);
 const float TOP = HEIGHT / 2;
 const float BOTTOM = -HEIGHT / 2;
 const float LEFT = -WIDTH / 2;
 const float RIGHT = WIDTH / 2;
+
+const float PAN_SPEED = 5e-3f;
 
 static std::mt19937& rng() {
     static std::random_device rd;

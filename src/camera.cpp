@@ -7,7 +7,7 @@ float Camera::changeZoom(float _z) {
 }
 
 glm::vec2 Camera::move(glm::vec2 _m) {
-  this->position += _m;
+  this->position += _m * PAN_SPEED;
   return this->position;
 }
 
@@ -15,7 +15,7 @@ void Camera::apply() {
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
 
-  glm::vec2 scaledSize = SCREENSIZE / zoom;
+  glm::vec2 scaledSize = glm::vec2(5,5 * HEIGHT / WIDTH) / zoom;
 
   glOrtho(position.x - scaledSize.x, position.x + scaledSize.x,
           position.y - scaledSize.y, position.y + scaledSize.y,
