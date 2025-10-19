@@ -20,19 +20,6 @@ vec2 Object::updatePosition() {
 
 void Object::step() {
     updatePosition();
-    // checkCollisions();
-}
-
-void Object::checkCollisions() {
-    if (position.y < -TOP || position.y > TOP) {
-        velocity.y *= -0.95;
-        position.y = clamp(position.y, -TOP, TOP);
-    }
-
-    if (position.x < LEFT || position.x > -LEFT) {
-        velocity.x *= -0.95;
-        position.x = clamp(position.x, LEFT, -LEFT);
-    }
 }
 
 void Object::draw(int _resolution) {
