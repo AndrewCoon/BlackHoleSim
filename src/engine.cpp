@@ -70,24 +70,22 @@ void Engine::run() {
 }
 
 void Engine::simulate() {
-    for (auto& obj : objects) {
-        for (auto& obj2 : objects) {
-            if (&obj == &obj2) continue;
+  for (int i = 0; i < objects.size(); i++) {
+    Object &obj = objects[i];
+    for (int j = i + 1; j < objects.size(); j++) {
+      Object &obj2 = objects[j];
+      if (&obj == &obj2) continue;
 
-            vec2 distance = obj2.position - obj.position;
-            float r = length(distance) + EPSILON;
-            r *= DISTANCE_MULT;
-            vec2 dir = normalize(distance);
+      vec2 distance = obj2.position - obj.position;
+      float r = length(distance);
+      vec2 dir = normalize(distance);
 
-            // if (r < obj.radius + obj2.radius) {
-            //   obj.velocity *= -0.2f;
-            // } 
-
-            vec2 force = dir * (G * obj.mass * obj2.mass) / (r * r);
-            vec2 deltaAccel = force / obj.mass;
-            obj.accelerate(deltaAccel);
-        }
+      vec2 force = dir * (G * obj.mass * obj2.mass) / (r * r + EPSILON * EPSILON);
+      vec2 deltaAccel = force / obj.mass;
+      obj.accelerate(deltaAccel * DT);
+      obj2.accelerate(-deltaAccel * DT);
     }
+  }
 }
 
 void Engine::render() {
