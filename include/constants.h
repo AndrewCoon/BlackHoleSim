@@ -3,6 +3,9 @@
 #include <glm/glm.hpp>
 #include <iostream>
 
+const double TARGET_FPS = 120.0;
+const double FRAME_TIME = 1.0 / TARGET_FPS;
+
 const float PI = 3.14159265359;
 const float G = 6.6743e-11;
 const float c = 299792458.0;

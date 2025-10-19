@@ -1,3 +1,5 @@
+#include <thread>
+#include <chrono>
 #include "constants.h"
 #include "object.h"
 #include "engine.h"
@@ -15,11 +17,21 @@ int main() {
 
   engine.setObjects(objs);
 
-  while (!glfwWindowShouldClose(engine.window)) {
-    engine.run();
+  double lastTime = glfwGetTime();
 
-    glfwSwapBuffers(engine.window);
-    glfwPollEvents();
+  while (!glfwWindowShouldClose(engine.window)) {
+    double currentTime = glfwGetTime();
+    double elapsed = currentTime - lastTime;
+
+    if (elapsed >= FRAME_TIME) {
+      lastTime = currentTime;
+      engine.run();
+
+      glfwSwapBuffers(engine.window);
+      glfwPollEvents();
+    } else {
+      this_thread::sleep_for(chrono::duration<double>(FRAME_TIME - elapsed));
+    }
   }
 
   glfwTerminate();

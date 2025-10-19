@@ -20,7 +20,7 @@ private:
     GLFWwindow* StartGLFW();
     void processInput(GLFWwindow* window);
     void drawCircle(glm::vec2 position, float radius);
-    void drawObject(Object object);
+    void drawObject(const Object& obj);
     void simulate();
     void render();
     static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
