@@ -83,8 +83,6 @@ void Engine::simulate() {
 
       vec2 force = dir * (G * m1 * m2) / (r * r + EPSILON * EPSILON);
       obj.accelerate(force / m1 * DT);
-      std::cout << "m1: " << m1 << " m2: " << m2 << "\n";
-      std::cout << "applying force of x: " << force.x << " y: " << force.y << "\n";
     }
   }
 }
