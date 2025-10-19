@@ -3,18 +3,19 @@
 #include <GLFW/glfw3.h>
 #include "constants.h"
 #include "object.h"
+#include "camera.h"
 
 class Engine {
 public:
     GLFWwindow* window;
     std::vector<Object> objects;
-
+    bool paused;
+    Camera camera;
     Engine();
     std::vector<Object> setObjects(std::vector<Object> _n);
     void run();
 
 private:
-    bool paused;
 
     GLFWwindow* StartGLFW();
     void processInput(GLFWwindow* window);

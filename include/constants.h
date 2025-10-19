@@ -11,6 +11,7 @@ const float DT = 1e-3;
 const int RES = 100;
 const float WIDTH = 800;
 const float HEIGHT = 600;
+const glm::vec2 SCREENSIZE(WIDTH, HEIGHT);
 const float TOP = HEIGHT / 2;
 const float BOTTOM = -HEIGHT / 2;
 const float LEFT = -WIDTH / 2;

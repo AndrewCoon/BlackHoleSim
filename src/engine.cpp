@@ -8,7 +8,7 @@ using namespace glm;
 using namespace std;
 
 
-Engine::Engine() {
+Engine::Engine() : camera() {
   this->window = StartGLFW();
   paused = true;
 }
@@ -89,11 +89,13 @@ void Engine::simulate() {
 }
 
 void Engine::render() {
-    glClear(GL_COLOR_BUFFER_BIT);
-    for (auto& obj : objects) {
-      if (!paused) obj.step();
-      drawObject(obj);
-    }
+  glClear(GL_COLOR_BUFFER_BIT);
+  camera.apply();
+
+  for (auto& obj : objects) {
+    if (!paused) obj.step();
+    drawObject(obj);
+  }
 }
 
 static bool spaceWasPressed = false;
@@ -109,6 +111,17 @@ void Engine::processInput(GLFWwindow* window) {
   } else {
     spaceWasPressed = false;
   }
+
+
+  // Zoom
+  if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) camera.changeZoom(1.02f);
+  if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) camera.changeZoom(0.98f);
+
+  // Pan
+  if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) camera.move(glm::vec2(0.0f, 10.0f / camera.zoom));
+  if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) camera.move(glm::vec2(0.0f, -10.0f / camera.zoom));
+  if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) camera.move(glm::vec2(-10.0f / camera.zoom, 0.0f ));
+  if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) camera.move(glm::vec2(10.0f / camera.zoom, 0.0f ));
 }
 
 // When transitioned to use z coordinates keep this function, but have it call the function that uses a vec3 with a z coord of 0
@@ -130,6 +143,6 @@ void Engine::drawObject(Object object) {
 }
 
 void Engine::framebuffer_size_callback(GLFWwindow* window, int width, int height) {
-    glViewport(0, 0, width, height);
+  glViewport(0, 0, width, height);
 }
 
