@@ -75,15 +75,14 @@ void Engine::simulate() {
             if (&obj == &obj2) continue;
 
             vec2 distance = obj2.position - obj.position;
-            float r = length(distance);
-            if (r < 1.0f) r = 1.0f;
-            r *= 1000;
-
+            float r = length(distance) + EPSILON;
+            r *= DISTANCE_MULT;
             vec2 dir = normalize(distance);
 
-            if (r < obj.radius + obj2.radius) {
-              obj.velocity *= -0.2f;
-            } 
+            // if (r < obj.radius + obj2.radius) {
+            //   obj.velocity *= -0.2f;
+            // } 
+
             vec2 force = dir * (G * obj.mass * obj2.mass) / (r * r);
             vec2 deltaAccel = force / obj.mass;
             obj.accelerate(deltaAccel);

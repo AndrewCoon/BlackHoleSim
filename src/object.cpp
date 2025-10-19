@@ -20,7 +20,7 @@ vec2 Object::updatePosition() {
 
 void Object::step() {
     updatePosition();
-    checkCollisions();
+    // checkCollisions();
 }
 
 void Object::checkCollisions() {
