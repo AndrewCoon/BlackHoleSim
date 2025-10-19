@@ -8,7 +8,7 @@ public:
   glm::vec2 position;
   float zoom;
 
-  Camera(glm::vec2 _pos = glm::vec2(0.0f, 0.0f), float _zoom = 1e-2f) 
+  Camera(glm::vec2 _pos = glm::vec2(0.0f, 0.0f), float _zoom = 3e-3f) 
    : position(_pos), zoom(_zoom) {}
   
   glm::vec2 worldToScreen(const glm::vec2& worldPos) const {
