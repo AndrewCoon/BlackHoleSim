@@ -75,7 +75,7 @@ void Engine::simulate() {
             float r = length(distance);
             if (r < 1.0f) r = 1.0f;
             r *= 1000;
-      
+
             vec2 dir = normalize(distance);
 
             if (r < obj.radius + obj2.radius) {
@@ -92,7 +92,7 @@ void Engine::render() {
     glClear(GL_COLOR_BUFFER_BIT);
     for (auto& obj : objects) {
       if (!paused) obj.step();
-      obj.draw(RES);
+      drawObject(obj);
     }
 }
 
@@ -111,6 +111,25 @@ void Engine::processInput(GLFWwindow* window) {
   }
 }
 
+// When transitioned to use z coordinates keep this function, but have it call the function that uses a vec3 with a z coord of 0
+void Engine::drawCircle(vec2 position, float radius) {
+    glBegin(GL_TRIANGLE_FAN);
+    glVertex2d(position.x, position.y);
+    for (int i = 0; i <= RES; i++) {
+        float angle = 2.0f * PI * (float)i / RES;
+        float x = position.x + cos(angle) * radius;
+        float y = position.y + sin(angle) * radius;
+        glVertex2d(x, y);
+    }
+    glEnd();
+}
+
+void Engine::drawObject(Object object) {
+    glColor3f(object.color.x, object.color.y, object.color.z);
+    drawCircle(object.position, object.radius);
+}
+
 void Engine::framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
 }
+
