@@ -14,6 +14,7 @@ public:
     Engine();
     std::vector<Object> setObjects(std::vector<Object> _n);
     void run();
+    void render();
 
 private:
 
@@ -22,6 +23,5 @@ private:
     void drawCircle(glm::vec2 position, float radius);
     void drawObject(const Object& obj);
     void simulate();
-    void render();
     static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 };

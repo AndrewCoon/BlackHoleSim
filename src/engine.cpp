@@ -60,13 +60,9 @@ GLFWwindow* Engine::StartGLFW() {
 }
 
 void Engine::run() {
-  processInput(window);
-
   if (!paused) {
     simulate();
   }
-
-  render();
 }
 
 void Engine::simulate() {
@@ -82,12 +78,14 @@ void Engine::simulate() {
       vec2 dir = normalize(distance);
 
       vec2 force = dir * (G * m1 * m2) / (r * r + EPSILON * EPSILON);
-      obj.accelerate(force / m1 * DT);
+      obj.accelerate(force / m1 * (float)DT);
     }
   }
 }
 
 void Engine::render() {
+  processInput(window);
+
   glClear(GL_COLOR_BUFFER_BIT);
   camera.apply();
 

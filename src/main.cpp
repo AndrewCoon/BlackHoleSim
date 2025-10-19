@@ -11,7 +11,7 @@ using namespace std;
 std::vector<Object> randomField(int N) {
     std::vector<Object> v;
     v.reserve(N);
-    float massMin = 1e2, massMax = 1e3f;
+    float massMin = 0, massMax = 4;
     float speed = 20.0f;
     float radiusMin = 2.0f, radiusMax = 6.0f;
 
@@ -89,28 +89,37 @@ int main() {
   Engine engine;
 
   vector<Object> objs = {
-    Object(vec2(0, 0), vec2(0, 0), 7.35e24, 15.0f, vec3(190.0f / 255.0f, 0.0f, 0.0f)),
-    Object(vec2(300, 0), vec2(0, 1000), 7.35e22, 15.0f, vec3(0.0f, 106.0f / 255.0f, 200.0f / 255.0f))
+    Object(vec2(0, 0), vec2(0, 0), 7.35e2, 15.0f, vec3(190.0f / 255.0f, 0.0f, 0.0f)),
+    Object(vec2(300, 0), vec2(0, 10), 7.35e-4, 15.0f, vec3(0.0f, 106.0f / 255.0f, 200.0f / 255.0f))
   };
 
-  // engine.setObjects(generateCircularOrbit(200, vec2(0.0f, 0.0f), 1e8, 150, 1000));
-  engine.setObjects(generateSolarSystem());
+  // engine.setObjects(objs); 
+  // engine.setObjects(randomField(200));
+  engine.setObjects(generateCircularOrbit(200, vec2(0.0f, 0.0f), 1e8, 150, 1000));
+  // engine.setObjects(generateSolarSystem());
 
+  double accum = 0.0;
   double lastTime = glfwGetTime();
 
   while (!glfwWindowShouldClose(engine.window)) {
     double currentTime = glfwGetTime();
     double elapsed = currentTime - lastTime;
+    lastTime = currentTime;
 
-    if (elapsed >= FRAME_TIME) {
-      lastTime = currentTime;
+    accum += elapsed;
+
+    while (accum >= DT) {
       engine.run();
-
-      glfwSwapBuffers(engine.window);
-      glfwPollEvents();
-    } else {
-      this_thread::sleep_for(chrono::duration<double>(FRAME_TIME - elapsed));
+      accum -= DT;
     }
+
+    engine.render();
+    glfwSwapBuffers(engine.window);
+    glfwPollEvents();
+
+    double frameTime = glfwGetTime() - currentTime;
+    if (frameTime < FRAME_TIME)
+      this_thread::sleep_for(chrono::duration<double>(FRAME_TIME - frameTime));
   }
 
   glfwTerminate();

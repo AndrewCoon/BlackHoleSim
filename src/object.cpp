@@ -14,7 +14,7 @@ vec2 Object::accelerate(vec2 _accel) {
 }
 
 vec2 Object::updatePosition() {
-    position += velocity * DT;
+    position += velocity * (float)DT;
     return position;
 }
 

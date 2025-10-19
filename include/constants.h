@@ -4,6 +4,9 @@
 #include <iostream>
 #include <random>
 
+const double TPS = 100;
+const double DT = 1 / TPS;
+
 const double TARGET_FPS = 120.0;
 const double FRAME_TIME = 1.0 / TARGET_FPS;
 
@@ -12,13 +15,12 @@ const float CONVERSTION_FACTOR = 2.229e-15;
 const float AU = 1.496e11;
 const float SOLAR_MASS = 1.989e30;
 
-const float EPSILON = 1e-8;
+const float EPSILON = 1e-1;
 const float PI = 3.14159265359;
 const float G = 132712449941.279319 * CONVERSTION_FACTOR;
 
 const float DISTANCE_SCALE = 1.0f / AU;
 const float MASS_SCALE = 1.0f / SOLAR_MASS;
-const float DT = 1e-1;
 
 const float WIDTH = 800;
 const float HEIGHT = 600;
